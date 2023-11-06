@@ -1,19 +1,21 @@
 import scrapy
 
 from pep_parse.items import PepParseItem
+from pep_parse.settings import SPIDER_NAME, ALLOWED_DOMAINS, START_URLS
 
 
 class PepSpider(scrapy.Spider):
 
-    name = 'pep'
-    allowed_domains = ['peps.python.org']
-    start_urls = ['https://peps.python.org/']
+    name = SPIDER_NAME
+    allowed_domains = ALLOWED_DOMAINS
+    start_urls = START_URLS
 
     def parse(self, response):
         table_bodies = response.css('tbody')
 
         for tr in table_bodies.css('tr'):
             link_pep_page = tr.css('td').css('a::attr(href)').get()
+            link_pep_page += '/'
             if link_pep_page is not None:
                 yield response.follow(link_pep_page, callback=self.parse_pep)
 
