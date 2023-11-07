@@ -21,10 +21,11 @@ class PepSpider(scrapy.Spider):
 
     def parse_pep(self, response):
         title = response.css('h1.page-title::text').get()
-
+        st = response.css('dt:contains("Status") + dd')
+        abbr = st.css('abbr::text').get()
         data = {
             'number': [int(s) for s in title.split() if s.isdigit()][0],
             'name': title,
-            'status': response.css('dt:contains("Status") + dd::text').get()
+            'status': abbr
         }
         yield PepParseItem(data)

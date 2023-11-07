@@ -5,9 +5,9 @@ from pep_parse.settings import BASE_DIR
 
 
 class PepParsePipeline:
-    pep_status_count = defaultdict(int)
 
     def open_spider(self, spider):
+        self.pep_status_count = defaultdict(int)
         result_dir = BASE_DIR / 'results'
         result_dir.mkdir(exist_ok=True)
 
